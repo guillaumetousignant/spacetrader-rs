@@ -1,0 +1,7 @@
+.gitignore linguist-vendored
+Cargo.lock linguist-vendored
+Cargo.toml linguist-vendored
+
+* text=auto eol=crlf
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
