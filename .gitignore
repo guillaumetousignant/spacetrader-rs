@@ -15,3 +15,6 @@ target/
 
 # Visual Studio Code folder
 .vscode/
+
+# Credentials file
+credentials.json

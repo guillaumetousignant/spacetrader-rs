@@ -2,9 +2,17 @@
 name = "spacetraders-rs"
 version = "0.1.0"
 edition = "2021"
+authors = ["Guillaume Tousignant <https://github.com/guillaumetousignant>"]
+description = "CLI app for spacetraders.io"
+readme = "README.md"
+repository = "https://github.com/guillaumetousignant/spacetraders-rs/"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = { version = "4", features = ["derive", "unicode"] }
 reqwest = { version = "0.11", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
 tokio = { version = "1", features = ["full"] }
