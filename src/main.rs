@@ -1,8 +1,8 @@
 use clap::Parser;
 use spacetraders_rs::commands::register;
 use spacetraders_rs::commands::run;
-use spacetraders_rs::utilities::Cli;
-use spacetraders_rs::utilities::Commands;
+use spacetraders_rs::helpers::Cli;
+use spacetraders_rs::helpers::Commands;
 use std::path::Path;
 
 #[tokio::main]

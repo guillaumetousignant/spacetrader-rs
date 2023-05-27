@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct LocationData {
     symbol: Waypoint,
     #[serde(rename = "type")]
-    location_type: String,
+    location_type: String, // Make enum?
     #[serde(rename = "systemSymbol")]
     system_symbol: System,
     x: i128,
