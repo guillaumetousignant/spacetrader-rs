@@ -4,15 +4,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ContractData {
-    id: String,
+    pub id: String,
     #[serde(rename = "factionSymbol")]
-    faction_symbol: String,
+    pub faction_symbol: String,
     #[serde(rename = "type")]
-    contract_type: String,
-    terms: TermsData,
-    accepted: bool,
-    fulfilled: bool,
-    expiration: DateTime<Utc>,
+    pub contract_type: String,
+    pub terms: TermsData,
+    pub accepted: bool,
+    pub fulfilled: bool,
+    pub expiration: DateTime<Utc>,
     #[serde(rename = "deadlineToAccept")]
-    deadline_to_accept: DateTime<Utc>,
+    pub deadline_to_accept: DateTime<Utc>,
 }

@@ -1,3 +1,4 @@
+use super::URL;
 use crate::spacetraders_api::requests::Registration;
 use crate::spacetraders_api::responses::AgentRegistration;
 use reqwest::Client;
@@ -13,7 +14,7 @@ pub async fn register(
     };
 
     client
-        .post("https://api.spacetraders.io/v2/register")
+        .post(format!("{URL}/register"))
         .json(&registration_request)
         .send()
         .await?

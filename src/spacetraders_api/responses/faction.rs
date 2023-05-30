@@ -1,7 +1,7 @@
-use super::AgentData;
+use super::FactionData;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Agent {
-    pub data: AgentData,
+pub struct Faction {
+    data: FactionData,
 }

@@ -1,4 +1,4 @@
 pub mod commands;
 pub mod helpers;
-mod queries;
-mod spacetraders_api;
+pub mod queries;
+pub mod spacetraders_api;

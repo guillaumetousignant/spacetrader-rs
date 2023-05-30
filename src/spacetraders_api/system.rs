@@ -1,3 +1,4 @@
+use super::Waypoint;
 use serde::de::{self, Visitor};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::fmt;
@@ -5,8 +6,18 @@ use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct System {
-    sector: String,
-    system: String,
+    pub sector: String,
+    pub system: String,
+}
+
+impl System {
+    pub fn waypoint(&self, location: String) -> Waypoint {
+        Waypoint {
+            sector: self.sector.clone(),
+            system: self.system.clone(),
+            location,
+        }
+    }
 }
 
 impl fmt::Display for System {

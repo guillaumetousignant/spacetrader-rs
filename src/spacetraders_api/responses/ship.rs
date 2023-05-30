@@ -1,7 +1,7 @@
-use super::AgentData;
+use super::ShipData;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Agent {
-    pub data: AgentData,
+pub struct Ship {
+    pub data: ShipData,
 }

@@ -1,7 +1,8 @@
-use super::AgentData;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Agent {
-    pub data: AgentData,
+pub struct MetaData {
+    total: u128,
+    page: u128,
+    limit: u128,
 }

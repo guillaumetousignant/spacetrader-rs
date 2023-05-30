@@ -4,11 +4,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FactionData {
-    symbol: String,
-    name: String,
-    description: String,
-    headquarters: Waypoint,
-    traits: Vec<TraitData>,
+    pub symbol: String,
+    pub name: String,
+    pub description: String,
+    pub headquarters: Waypoint,
+    pub traits: Vec<TraitData>,
     #[serde(rename = "isRecruiting")]
-    is_recruiting: bool,
+    pub is_recruiting: bool,
 }

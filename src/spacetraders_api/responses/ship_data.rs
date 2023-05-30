@@ -12,15 +12,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ShipData {
-    symbol: String,
-    nav: NavData,
-    crew: CrewData,
-    fuel: FuelData,
-    frame: FrameData,
-    reactor: ReactorData,
-    engine: EngineData,
-    modules: Vec<ModuleData>,
-    mounts: Vec<MountData>,
-    registration: RegistrationData,
-    cargo: CargoData,
+    pub symbol: String,
+    pub nav: NavData,
+    pub crew: CrewData,
+    pub fuel: FuelData,
+    pub frame: FrameData,
+    pub reactor: ReactorData,
+    pub engine: EngineData,
+    pub modules: Vec<ModuleData>,
+    pub mounts: Vec<MountData>,
+    pub registration: RegistrationData,
+    pub cargo: CargoData,
 }
