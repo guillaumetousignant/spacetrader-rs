@@ -1,25 +1,27 @@
 use clap::Parser;
 use spacetraders_rs::commands::register;
 use spacetraders_rs::commands::run;
+use spacetraders_rs::commands::status;
 use spacetraders_rs::helpers::Cli;
 use spacetraders_rs::helpers::Commands;
-use std::path::Path;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
-    let path: &Path = match cli.credentials.as_deref() {
-        Some(credentials_path) => credentials_path,
-        None => Path::new("credentials.json"),
-    };
-
     match &cli.command {
-        Commands::Register { callsign, faction } => {
-            return register(path, callsign, faction).await;
+        Commands::Register {
+            credentials,
+            callsign,
+            faction,
+        } => {
+            return register(credentials, callsign, faction).await;
         }
-        Commands::Run {} => {
-            return run(path).await;
+        Commands::Run { credentials } => {
+            return run(credentials).await;
+        }
+        Commands::Status {} => {
+            return status().await;
         }
     }
 }

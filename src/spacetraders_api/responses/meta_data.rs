@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MetaData {
-    total: u128,
-    page: u128,
-    limit: u128,
+    pub total: u128,
+    pub page: u128,
+    pub limit: u128,
 }
