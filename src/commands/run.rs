@@ -19,16 +19,19 @@ pub async fn run(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    let systems_response = queries::systems(&client, 1, 20).await?;
-    println!("Systems: {:#?}", systems_response);
+    let ships_response = queries::ships(&client, &credentials, None, None).await?;
+    let mut mining_ship: Option<String> = None;
+    for ship in ships_response.data {
+        if ship.frame.symbol == "FRAME_DRONE" {
+            mining_ship = Some(ship.symbol.clone());
+            println!("Using {} as mining ship", ship.symbol);
+            break;
+        }
+    }
 
-    let n_systems = systems_response.meta.total;
-    let page_size = systems_response.meta.limit;
-    let n_pages = (n_systems + (page_size - 1)) / page_size;
-
-    for i in 2..=n_pages {
-        let systems_response = queries::systems(&client, i, page_size).await?;
-        println!("Systems: {:#?}", systems_response);
+    if let None = mining_ship {
+        // Buy ship
+        println!("Buying ship");
     }
 
     Ok(())

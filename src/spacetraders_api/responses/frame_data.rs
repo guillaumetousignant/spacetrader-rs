@@ -3,15 +3,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FrameData {
-    symbol: String,
-    name: String,
-    description: String,
+    pub symbol: String,
+    pub name: String,
+    pub description: String,
     #[serde(rename = "moduleSlots")]
-    module_slots: u128,
+    pub module_slots: u128,
     #[serde(rename = "mountingPoints")]
-    mounting_points: u128,
+    pub mounting_points: u128,
     #[serde(rename = "fuelCapacity")]
-    fuel_capacity: u128,
-    condition: i128,
-    requirements: RequirementsData,
+    pub fuel_capacity: u128,
+    pub condition: i128,
+    pub requirements: RequirementsData,
 }

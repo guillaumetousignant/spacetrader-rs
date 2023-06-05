@@ -1,4 +1,5 @@
 use clap::Parser;
+use spacetraders_rs::commands::info;
 use spacetraders_rs::commands::register;
 use spacetraders_rs::commands::run;
 use spacetraders_rs::commands::status;
@@ -10,6 +11,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
     match &cli.command {
+        Commands::Info { credentials } => {
+            return info(credentials).await;
+        }
         Commands::Register {
             credentials,
             callsign,

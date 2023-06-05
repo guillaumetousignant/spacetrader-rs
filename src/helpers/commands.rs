@@ -5,6 +5,13 @@ const DEFAULT_PATH: &str = "credentials.json";
 
 #[derive(Subcommand)]
 pub enum Commands {
+    /// Shows info about an agent
+    Info {
+        /// Path to credentials file
+        #[arg(short='p', long, value_name = "FILE", default_value = PathBuf::from(DEFAULT_PATH).into_os_string())]
+        credentials: PathBuf,
+    },
+
     /// Registers a new agent
     Register {
         /// Path to credentials file
