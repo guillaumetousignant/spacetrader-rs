@@ -1,47 +1,25 @@
-use super::get_rate_limit;
-use super::StatusError;
-use super::TooManyRetriesError;
-use super::N_RETRIES;
-use super::URL;
-use crate::helpers::Credentials;
-use crate::spacetraders_api::requests::Page;
-use crate::spacetraders_api::responses::Ships;
+use super::ships_page;
+use super::MAX_LIMIT;
+use crate::spacetraders_api::responses::Ship;
 use reqwest::Client;
-use reqwest::StatusCode;
 
 pub async fn ships(
     client: &Client,
-    credentials: &Credentials,
-    page: impl Into<Option<u128>>,
-    limit: impl Into<Option<u128>>,
-) -> Result<Ships, Box<dyn std::error::Error>> {
-    let page_query = Page {
-        page: page.into(),
-        limit: limit.into(),
-    };
+    token: &str,
+) -> Result<Vec<Ship>, Box<dyn std::error::Error + Send + Sync>> {
+    let response = ships_page(client, token, 1, MAX_LIMIT).await?;
+    let n_items = response.meta.total;
+    let n_pages = (n_items + MAX_LIMIT - 1) / MAX_LIMIT;
 
-    for _ in 0..N_RETRIES {
-        let response = client
-            .get(format!("{URL}/my/ships"))
-            .bearer_auth(&credentials.token)
-            .query(&page_query)
-            .send()
-            .await?;
-        match response.status() {
-            StatusCode::OK => return Ok(response.json().await?),
-            StatusCode::TOO_MANY_REQUESTS => {
-                let duration = get_rate_limit(&response)?;
-                tokio::time::sleep(duration).await;
+    return match n_pages {
+        1 => Ok(response.data),
+        _ => {
+            let mut data = response.data;
+            for i in 2..n_pages {
+                let mut response = ships_page(client, token, i, MAX_LIMIT).await?;
+                data.append(&mut response.data);
             }
-            _ => {
-                return Err(StatusError {
-                    status: response.status(),
-                    url: response.url().clone(),
-                }
-                .into())
-            }
+            Ok(data)
         }
-    }
-
-    Err(TooManyRetriesError.into())
+    };
 }

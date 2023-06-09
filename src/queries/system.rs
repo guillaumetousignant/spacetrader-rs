@@ -10,12 +10,18 @@ use reqwest::StatusCode;
 
 pub async fn system(
     client: &Client,
+    token: impl Into<Option<&str>>,
     system: &System,
-) -> Result<responses::System, Box<dyn std::error::Error>> {
+) -> Result<responses::System, Box<dyn std::error::Error + Send + Sync>> {
+    let token = token.into();
     for _ in 0..N_RETRIES {
-        let response = client.get(format!("{URL}/systems/{system}")).send().await?;
+        let response = client
+            .get(format!("{URL}/systems/{system}"))
+            .bearer_auth(token.unwrap_or(""))
+            .send()
+            .await?;
         match response.status() {
-            StatusCode::OK => return Ok(response.json().await?),
+            StatusCode::OK => return Ok(response.json::<responses::SystemResponse>().await?.data),
             StatusCode::TOO_MANY_REQUESTS => {
                 let duration = get_rate_limit(&response)?;
                 tokio::time::sleep(duration).await;

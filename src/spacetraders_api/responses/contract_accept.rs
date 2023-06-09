@@ -1,7 +1,14 @@
-use super::ContractAcceptData;
+use super::Agent;
+use super::Contract;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ContractAccept {
-    pub data: ContractAcceptData,
+    contract: Contract,
+    agent: Agent,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContractAcceptResponse {
+    pub data: ContractAccept,
 }

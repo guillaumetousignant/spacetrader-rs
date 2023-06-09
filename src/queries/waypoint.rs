@@ -11,16 +11,21 @@ use reqwest::StatusCode;
 
 pub async fn waypoint(
     client: &Client,
+    token: impl Into<Option<&str>>,
     system: &System,
     waypoint: &Waypoint,
-) -> Result<responses::Waypoint, Box<dyn std::error::Error>> {
+) -> Result<responses::Waypoint, Box<dyn std::error::Error + Send + Sync>> {
+    let token = token.into();
     for _ in 0..N_RETRIES {
         let response = client
             .get(format!("{URL}/systems/{system}/waypoints/{waypoint}"))
+            .bearer_auth(token.unwrap_or(""))
             .send()
             .await?;
         match response.status() {
-            StatusCode::OK => return Ok(response.json().await?),
+            StatusCode::OK => {
+                return Ok(response.json::<responses::WaypointResponse>().await?.data)
+            }
             StatusCode::TOO_MANY_REQUESTS => {
                 let duration = get_rate_limit(&response)?;
                 tokio::time::sleep(duration).await;

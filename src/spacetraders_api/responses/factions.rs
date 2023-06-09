@@ -1,9 +1,9 @@
-use super::FactionData;
+use super::Faction;
 use super::MetaData;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Factions {
-    pub data: Vec<FactionData>,
+    pub data: Vec<Faction>,
     pub meta: MetaData,
 }

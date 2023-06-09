@@ -1,9 +1,9 @@
 use super::MetaData;
-use super::ShipData;
+use super::Ship;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Ships {
-    pub data: Vec<ShipData>,
+    pub data: Vec<Ship>,
     pub meta: MetaData,
 }

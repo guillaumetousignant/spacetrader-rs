@@ -5,6 +5,7 @@ use super::N_RETRIES;
 use super::URL;
 use crate::spacetraders_api::requests::Registration;
 use crate::spacetraders_api::responses::AgentRegistration;
+use crate::spacetraders_api::responses::AgentRegistrationResponse;
 use reqwest::Client;
 use reqwest::StatusCode;
 
@@ -12,7 +13,7 @@ pub async fn register(
     client: &Client,
     callsign: &str,
     faction: &str,
-) -> Result<AgentRegistration, Box<dyn std::error::Error>> {
+) -> Result<AgentRegistration, Box<dyn std::error::Error + Send + Sync>> {
     let registration_request = Registration {
         symbol: callsign.into(),
         faction: faction.into(),
@@ -25,7 +26,9 @@ pub async fn register(
             .send()
             .await?;
         match response.status() {
-            StatusCode::OK => return Ok(response.json().await?),
+            StatusCode::CREATED => {
+                return Ok(response.json::<AgentRegistrationResponse>().await?.data)
+            }
             StatusCode::TOO_MANY_REQUESTS => {
                 let duration = get_rate_limit(&response)?;
                 tokio::time::sleep(duration).await;

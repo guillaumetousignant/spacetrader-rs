@@ -1,7 +1,18 @@
-use super::ContractData;
+use super::Terms;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Contract {
-    pub data: ContractData,
+    pub id: String,
+    #[serde(rename = "factionSymbol")]
+    pub faction_symbol: String,
+    #[serde(rename = "type")]
+    pub contract_type: String,
+    pub terms: Terms,
+    pub accepted: bool,
+    pub fulfilled: bool,
+    pub expiration: DateTime<Utc>,
+    #[serde(rename = "deadlineToAccept")]
+    pub deadline_to_accept: DateTime<Utc>,
 }

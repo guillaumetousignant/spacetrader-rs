@@ -1,9 +1,9 @@
 use super::MetaData;
-use super::WaypointData;
+use super::Waypoint;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Waypoints {
-    pub data: Vec<WaypointData>,
+    pub data: Vec<Waypoint>,
     pub meta: MetaData,
 }

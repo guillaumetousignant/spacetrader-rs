@@ -7,7 +7,7 @@ use crate::spacetraders_api::responses::Status;
 use reqwest::Client;
 use reqwest::StatusCode;
 
-pub async fn status(client: &Client) -> Result<Status, Box<dyn std::error::Error>> {
+pub async fn status(client: &Client) -> Result<Status, Box<dyn std::error::Error + Send + Sync>> {
     for _ in 0..N_RETRIES {
         let response = client.get(format!("{URL}")).send().await?;
         match response.status() {

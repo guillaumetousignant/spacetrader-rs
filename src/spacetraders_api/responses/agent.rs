@@ -1,7 +1,18 @@
-use super::AgentData;
+use crate::spacetraders_api::Waypoint;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Agent {
-    pub data: AgentData,
+    #[serde(rename = "accountId")]
+    pub account_id: String,
+    pub symbol: String,
+    pub headquarters: Waypoint,
+    pub credits: i128,
+    #[serde(rename = "startingFaction")]
+    pub starting_faction: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AgentResponse {
+    pub data: Agent,
 }

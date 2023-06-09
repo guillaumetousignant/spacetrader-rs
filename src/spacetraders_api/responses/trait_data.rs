@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TraitData {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Trait {
     symbol: String,
     name: String,
     description: String,

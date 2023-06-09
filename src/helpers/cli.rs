@@ -5,11 +5,15 @@ use clap::Parser;
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
 pub struct Cli {
+    /// Command to use
+    #[command(subcommand)]
+    pub command: Commands,
+
     /// Increase verbosity
     #[arg(short, long, action = clap::ArgAction::Count)]
     pub verbose: u8,
 
-    /// Command to use
-    #[command(subcommand)]
-    pub command: Commands,
+    /// Silence all output
+    #[arg(short, long)]
+    pub quiet: bool,
 }

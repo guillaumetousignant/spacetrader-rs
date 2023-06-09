@@ -1,9 +1,9 @@
 use super::MetaData;
-use super::SystemData;
+use super::System;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Systems {
-    pub data: Vec<SystemData>,
+    pub data: Vec<System>,
     pub meta: MetaData,
 }
