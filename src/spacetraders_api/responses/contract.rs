@@ -1,3 +1,4 @@
+use super::Meta;
 use super::Terms;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -15,4 +16,15 @@ pub struct Contract {
     pub expiration: DateTime<Utc>,
     #[serde(rename = "deadlineToAccept")]
     pub deadline_to_accept: DateTime<Utc>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContractResponse {
+    pub data: Contract,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Contracts {
+    pub data: Vec<Contract>,
+    pub meta: Meta,
 }

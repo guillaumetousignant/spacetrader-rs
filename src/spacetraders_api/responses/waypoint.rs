@@ -1,5 +1,6 @@
 use super::Chart;
 use super::FactionSymbol;
+use super::Meta;
 use super::Orbital;
 use super::Trait;
 use crate::spacetraders_api;
@@ -18,4 +19,15 @@ pub struct Waypoint {
     traits: Vec<Trait>,
     chart: Chart,
     faction: FactionSymbol,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WaypointResponse {
+    pub data: Waypoint,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Waypoints {
+    pub data: Vec<Waypoint>,
+    pub meta: Meta,
 }

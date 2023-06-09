@@ -12,3 +12,20 @@ pub struct Shipyard {
     pub transactions: Vec<ShipyardTransaction>,
     pub ships: Vec<ShipyardShip>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShipyardUnauthorized {
+    pub symbol: Waypoint,
+    #[serde(rename = "shipTypes")]
+    pub ship_types: Vec<ShipType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShipyardResponse {
+    pub data: Shipyard,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShipyardUnauthorizedResponse {
+    pub data: ShipyardUnauthorized,
+}

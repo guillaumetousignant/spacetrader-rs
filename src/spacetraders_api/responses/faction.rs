@@ -1,3 +1,4 @@
+use super::Meta;
 use super::Trait;
 use crate::spacetraders_api::Waypoint;
 use serde::{Deserialize, Serialize};
@@ -11,4 +12,15 @@ pub struct Faction {
     pub traits: Vec<Trait>,
     #[serde(rename = "isRecruiting")]
     pub is_recruiting: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FactionResponse {
+    pub data: Faction,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Factions {
+    pub data: Vec<Faction>,
+    pub meta: Meta,
 }

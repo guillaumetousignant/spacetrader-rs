@@ -3,6 +3,7 @@ use super::Crew;
 use super::Engine;
 use super::Frame;
 use super::Fuel;
+use super::Meta;
 use super::Module;
 use super::Mount;
 use super::Nav;
@@ -23,4 +24,15 @@ pub struct Ship {
     pub mounts: Vec<Mount>,
     pub registration: Registration,
     pub cargo: Cargo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShipResponse {
+    pub data: Ship,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Ships {
+    pub data: Vec<Ship>,
+    pub meta: Meta,
 }
