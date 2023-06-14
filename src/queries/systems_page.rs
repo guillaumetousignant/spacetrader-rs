@@ -1,15 +1,14 @@
-use super::get_rate_limit;
-use super::StatusError;
-use super::TooManyRetriesError;
-use super::N_RETRIES;
+use super::Query;
 use super::URL;
 use crate::spacetraders_api::requests::Page;
 use crate::spacetraders_api::responses;
 use reqwest::Client;
-use reqwest::StatusCode;
+use tokio::sync::mpsc::Sender;
+use tokio::sync::oneshot;
 
 pub async fn systems_page(
     client: &Client,
+    sender: &Sender<Query>,
     token: impl Into<Option<&str>>,
     page: impl Into<Option<u128>>,
     limit: impl Into<Option<u128>>,
@@ -20,28 +19,17 @@ pub async fn systems_page(
         limit: limit.into(),
     };
 
-    for _ in 0..N_RETRIES {
-        let response = client
-            .get(format!("{URL}/systems"))
-            .bearer_auth(token.unwrap_or(""))
-            .query(&page_query)
-            .send()
-            .await?;
-        match response.status() {
-            StatusCode::OK => return Ok(response.json().await?),
-            StatusCode::TOO_MANY_REQUESTS => {
-                let duration = get_rate_limit(&response)?;
-                tokio::time::sleep(duration).await;
-            }
-            _ => {
-                return Err(StatusError {
-                    status: response.status(),
-                    url: response.url().clone(),
-                }
-                .into())
-            }
-        }
-    }
+    let request = client
+        .get(format!("{URL}/systems"))
+        .bearer_auth(token.unwrap_or(""))
+        .query(&page_query);
 
-    Err(TooManyRetriesError.into())
+    let (resp_tx, resp_rx) = oneshot::channel();
+    sender
+        .send(Query {
+            request,
+            response: resp_tx,
+        })
+        .await?;
+    Ok(resp_rx.await??.json().await?)
 }
