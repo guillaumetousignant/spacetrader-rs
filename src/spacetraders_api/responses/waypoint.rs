@@ -9,16 +9,16 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Waypoint {
     #[serde(rename = "systemSymbol")]
-    system_symbol: spacetraders_api::System,
-    symbol: spacetraders_api::Waypoint,
+    pub system_symbol: spacetraders_api::System,
+    pub symbol: spacetraders_api::Waypoint,
     #[serde(rename = "type")]
-    waypoint_type: String, // Make enum?
-    x: i128,
-    y: i128,
-    orbitals: Vec<Orbital>,
-    traits: Vec<Trait>,
-    chart: Chart,
-    faction: FactionSymbol,
+    pub waypoint_type: String, // Make enum?
+    pub x: i128,
+    pub y: i128,
+    pub orbitals: Vec<Orbital>,
+    pub traits: Vec<Trait>,
+    pub chart: Chart,
+    pub faction: FactionSymbol,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

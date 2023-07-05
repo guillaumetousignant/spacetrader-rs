@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Nav {
     #[serde(rename = "systemSymbol")]
-    system_symbol: System,
+    pub system_symbol: System,
     #[serde(rename = "waypointSymbol")]
-    waypoint_symbol: Waypoint,
-    route: Route,
-    status: String,
+    pub waypoint_symbol: Waypoint,
+    pub route: Route,
+    pub status: String,
     #[serde(rename = "flightMode")]
-    flight_mode: String,
+    pub flight_mode: String,
 }

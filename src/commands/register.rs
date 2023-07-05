@@ -37,7 +37,7 @@ pub async fn register(
     for ship in ships_response {
         let automation = match ship.registration.role.as_str() {
             "COMMAND" => ShipAutomation::Command,
-            "SURVEYOR" => ShipAutomation::Probe,
+            "SATELLITE" => ShipAutomation::Probe,
             _ => {
                 return Err(UnknownShipAutomationError {
                     value: ship.registration.role,

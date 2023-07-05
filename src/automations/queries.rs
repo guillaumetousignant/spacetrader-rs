@@ -1,7 +1,7 @@
 use crate::queries::{
     get_rate_limit, Query, RequestNotClonedError, StatusError, TooManyRetriesError, N_RETRIES,
 };
-use log::{info, trace, warn};
+use log::{trace, warn};
 use reqwest::StatusCode;
 use tokio::sync::mpsc::Receiver;
 use tokio::time;
@@ -13,7 +13,7 @@ pub async fn queries(
     let mut interval = time::interval(time::Duration::from_millis(500));
 
     while let Some(query) = receiver.recv().await {
-        info!("Received query");
+        trace!("Received query");
 
         for i in 0..N_RETRIES {
             let response = query

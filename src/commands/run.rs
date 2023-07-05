@@ -63,7 +63,8 @@ pub async fn run(
         Ok(())
     });
 
-    set.join_next().await;
-
-    Ok(())
+    match set.join_next().await {
+        Some(result) => result?,
+        None => Ok(()),
+    }
 }
