@@ -1,3 +1,4 @@
+use crate::automations;
 use crate::automations::ShipAutomation;
 use crate::local_data;
 use crate::queries::Query;
@@ -16,7 +17,7 @@ pub async fn acquisitions(
     credentials: Credentials,
     ships_path: &Path,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    trace!("Started acquisitions task");
+    info!("Started acquisitions task");
     let mut interval = time::interval(time::Duration::from_secs(10));
 
     loop {
@@ -57,17 +58,37 @@ pub async fn acquisitions(
                         ship_purchase.ship.symbol
                     );
 
+                    let symbol_mining = ship_purchase.ship.symbol.clone();
+
                     ships.ships.push(local_data::Ship {
                         symbol: ship_purchase.ship.symbol,
                         automation: ShipAutomation::Mining,
                     });
 
                     fs::write(ships_path, serde_json::to_string_pretty(&ships)?).await?;
+
+                    spawn_ship_task(
+                        client.clone(),
+                        sender.clone(),
+                        credentials.clone(),
+                        symbol_mining,
+                    );
                 }
                 None => warn!("No shipyard with probe present"),
             }
         }
     }
+}
+
+fn spawn_ship_task(
+    client: Client,
+    sender: Sender<Query>,
+    credentials: Credentials,
+    ship_symbol: String,
+) {
+    tokio::spawn(
+        async move { automations::mining(client, sender, credentials, ship_symbol).await },
+    );
 }
 
 async fn get_shipyard(

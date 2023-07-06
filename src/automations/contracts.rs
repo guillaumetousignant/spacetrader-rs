@@ -10,7 +10,7 @@ pub async fn contracts(
     sender: Sender<Query>,
     credentials: Credentials,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    trace!("Started contracts task");
+    info!("Started contracts task");
     let mut interval = time::interval(time::Duration::from_secs(10));
 
     loop {
