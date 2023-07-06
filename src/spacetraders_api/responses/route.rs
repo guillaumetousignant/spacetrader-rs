@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Route {
-    departure: Location,
-    destination: Location,
-    arrival: DateTime<Utc>,
+    pub departure: Location,
+    pub destination: Location,
+    pub arrival: DateTime<Utc>,
     #[serde(rename = "departureTime")]
-    departure_time: DateTime<Utc>,
+    pub departure_time: DateTime<Utc>,
 }

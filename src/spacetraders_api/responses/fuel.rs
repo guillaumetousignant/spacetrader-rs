@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Fuel {
-    current: u128,
-    capacity: u128,
-    consumed: FuelConsumed,
+    pub current: u128,
+    pub capacity: u128,
+    pub consumed: FuelConsumed,
 }
