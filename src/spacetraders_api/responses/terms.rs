@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Terms {
-    deadline: DateTime<Utc>,
-    payment: Payment,
-    deliver: Vec<Delivery>,
+    pub deadline: DateTime<Utc>,
+    pub payment: Payment,
+    pub deliver: Vec<Delivery>,
 }

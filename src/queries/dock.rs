@@ -7,14 +7,14 @@ use reqwest::Client;
 use tokio::sync::mpsc::Sender;
 use tokio::sync::oneshot;
 
-pub async fn orbit(
+pub async fn dock(
     client: &Client,
     sender: &Sender<Query>,
     token: &str,
     ship_id: &str,
 ) -> Result<NavStatus, Box<dyn std::error::Error + Send + Sync>> {
     let request = client
-        .post(format!("{URL}/my/ships/{ship_id}/orbit"))
+        .post(format!("{URL}/my/ships/{ship_id}/dock"))
         .bearer_auth(token)
         .header(CONTENT_LENGTH, 0);
     let (resp_tx, resp_rx) = oneshot::channel();

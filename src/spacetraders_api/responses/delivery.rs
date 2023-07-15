@@ -4,11 +4,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Delivery {
     #[serde(rename = "tradeSymbol")]
-    trade_symbol: String,
+    pub trade_symbol: String,
     #[serde(rename = "destinationSymbol")]
-    destination_symbol: Waypoint,
+    pub destination_symbol: Waypoint,
     #[serde(rename = "unitsRequired")]
-    units_required: u128,
+    pub units_required: u128,
     #[serde(rename = "unitsFulfilled")]
-    units_fulfilled: u128,
+    pub units_fulfilled: u128,
 }

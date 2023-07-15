@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WaypointLocation {
-    symbol: Waypoint,
+    pub symbol: Waypoint,
     #[serde(rename = "type")]
-    location_type: String, // Make enum?
-    x: i128,
-    y: i128,
+    pub waypoint_type: String, // Make enum?
+    pub x: i128,
+    pub y: i128,
 }

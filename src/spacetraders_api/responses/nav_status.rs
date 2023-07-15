@@ -2,11 +2,11 @@ use super::Nav;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Orbit {
+pub struct NavStatus {
     pub nav: Nav,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct OrbitResponse {
-    pub data: Orbit,
+pub struct NavStatusResponse {
+    pub data: NavStatus,
 }

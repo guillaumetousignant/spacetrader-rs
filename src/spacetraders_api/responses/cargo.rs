@@ -7,3 +7,8 @@ pub struct Cargo {
     pub units: u128,
     pub inventory: Vec<InventoryItem>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CargoResponse {
+    pub data: Cargo,
+}

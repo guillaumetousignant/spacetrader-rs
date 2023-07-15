@@ -5,15 +5,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct System {
-    symbol: String,
+    pub symbol: String,
     #[serde(rename = "sectorSymbol")]
-    sector_symbol: String,
+    pub sector_symbol: String,
     #[serde(rename = "type")]
-    system_type: String, // Good candidate for enum
-    x: i128,
-    y: i128,
-    waypoints: Vec<WaypointLocation>,
-    factions: Vec<FactionSymbol>,
+    pub system_type: String, // Good candidate for enum
+    pub x: i128,
+    pub y: i128,
+    pub waypoints: Vec<WaypointLocation>,
+    pub factions: Vec<FactionSymbol>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
