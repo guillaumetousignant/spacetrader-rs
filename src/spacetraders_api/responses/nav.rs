@@ -14,3 +14,8 @@ pub struct Nav {
     #[serde(rename = "flightMode")]
     pub flight_mode: String,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NavResponse {
+    pub data: Nav,
+}

@@ -1,10 +1,10 @@
-use super::find_trade_good;
-use super::find_trait;
-use super::{FUEL_SYMBOL, MARKET_TRAIT};
+use crate::automations::utilities::find_trade_good;
+use crate::automations::utilities::find_trait;
+use crate::automations::utilities::{FUEL_SYMBOL, MARKET_TRAIT};
 use crate::queries;
 use crate::queries::Query;
 use crate::spacetraders_api::responses::Fuel;
-use log::trace;
+use log::info;
 use reqwest::Client;
 use tokio::sync::mpsc::Sender;
 
@@ -41,7 +41,7 @@ pub async fn try_refuel(
 
             match fuel_trade_good {
                 Some(_) => {
-                    trace!(
+                    info!(
                         "Ship {ship_symbol} successfully refuelling in waypoint {}",
                         ship_response.nav.waypoint_symbol
                     );

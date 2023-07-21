@@ -26,6 +26,14 @@ impl fmt::Display for Waypoint {
     }
 }
 
+impl PartialEq for Waypoint {
+    fn eq(&self, other: &Self) -> bool {
+        self.sector == other.sector
+            && self.system == other.system
+            && self.location == other.location
+    }
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct ParseWaypointError;
 

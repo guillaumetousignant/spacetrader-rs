@@ -26,6 +26,12 @@ impl fmt::Display for System {
     }
 }
 
+impl PartialEq for System {
+    fn eq(&self, other: &Self) -> bool {
+        self.sector == other.sector && self.system == other.system
+    }
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct ParseSystemError;
 

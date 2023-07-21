@@ -12,3 +12,12 @@ pub struct Delivery {
     #[serde(rename = "unitsFulfilled")]
     pub units_fulfilled: u128,
 }
+
+impl PartialEq for Delivery {
+    fn eq(&self, other: &Self) -> bool {
+        self.trade_symbol == other.trade_symbol
+            && self.destination_symbol == other.destination_symbol
+            && self.units_required == other.units_required
+            && self.units_fulfilled == other.units_fulfilled
+    }
+}

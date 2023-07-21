@@ -1,10 +1,10 @@
-use super::wait_until;
-use super::State;
+use crate::automations::utilities::wait_until;
 use crate::queries;
 use crate::queries::Query;
 use crate::queries::StatusError;
 use crate::spacetraders_api::errors;
-use log::{trace, warn};
+use crate::spacetraders_api::responses::Cargo;
+use log::info;
 use reqwest::Client;
 use tokio::sync::mpsc::Sender;
 
@@ -13,7 +13,7 @@ pub async fn mine(
     sender: &Sender<Query>,
     token: &str,
     ship_symbol: &str,
-) -> Result<State, Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<Cargo, Box<dyn std::error::Error + Send + Sync>> {
     let _ = queries::orbit(client, sender, token, ship_symbol).await?;
     let extract_response = queries::extract(client, sender, token, ship_symbol).await;
 
@@ -24,7 +24,7 @@ pub async fn mine(
 
             if error.code == 4000 {
                 let cooldown = error.data.cooldown.expiration;
-                warn!("Ship {ship_symbol} extraction is on cooldown until {cooldown}");
+                info!("Ship {ship_symbol} extraction is on cooldown until {cooldown}");
                 wait_until(cooldown).await?;
                 queries::extract(client, sender, token, ship_symbol).await?
             } else {
@@ -37,22 +37,21 @@ pub async fn mine(
         extract_response?
     };
 
-    trace!(
+    info!(
         "Ship {ship_symbol} extracted {} units of {}",
-        extract_response.extraction.yield_data.units,
-        extract_response.extraction.yield_data.symbol
+        extract_response.extraction.yield_data.units, extract_response.extraction.yield_data.symbol
     );
 
     while extract_response.cargo.units < extract_response.cargo.capacity {
         wait_until(extract_response.cooldown.expiration).await?;
         extract_response = queries::extract(client, sender, token, ship_symbol).await?;
 
-        trace!(
+        info!(
             "Ship {ship_symbol} extracted {} units of {}",
             extract_response.extraction.yield_data.units,
             extract_response.extraction.yield_data.symbol
         );
     }
 
-    Ok(State::LookingForMarket)
+    Ok(extract_response.cargo)
 }

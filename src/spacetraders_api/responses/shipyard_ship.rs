@@ -8,14 +8,14 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ShipyardShip {
     #[serde(rename = "type")]
-    ship_type: String,
-    name: String,
-    description: String,
+    pub ship_type: String,
+    pub name: String,
+    pub description: String,
     #[serde(rename = "purchasePrice")]
-    purchase_price: u128,
-    frame: ShipyardFrame,
-    reactor: ShipyardReactorData,
-    engine: ShipyardEngine,
-    modules: Vec<Module>,
-    mounts: Vec<Mount>,
+    pub purchase_price: u128,
+    pub frame: ShipyardFrame,
+    pub reactor: ShipyardReactorData,
+    pub engine: ShipyardEngine,
+    pub modules: Vec<Module>,
+    pub mounts: Vec<Mount>,
 }

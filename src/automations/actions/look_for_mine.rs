@@ -1,10 +1,10 @@
-use super::find_waypoint_type_in_system;
-use super::State;
-use super::WaypointTypeNotFoundError;
-use super::MINING_WAYPOINT_TYPE;
+use crate::automations::utilities::find_waypoint_type_in_system;
+use crate::automations::utilities::WaypointTypeNotFoundError;
+use crate::automations::utilities::MINING_WAYPOINT_TYPE;
 use crate::queries;
 use crate::queries::Query;
-use log::{trace, warn};
+use chrono::{DateTime, Utc};
+use log::{info, warn};
 use reqwest::Client;
 use tokio::sync::mpsc::Sender;
 
@@ -13,7 +13,7 @@ pub async fn look_for_mine(
     sender: &Sender<Query>,
     token: &str,
     ship_symbol: &str,
-) -> Result<State, Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<Option<DateTime<Utc>>, Box<dyn std::error::Error + Send + Sync>> {
     let ship_response = queries::ship(client, sender, token, ship_symbol).await?;
     let waypoint_response = queries::waypoint(
         client,
@@ -25,7 +25,7 @@ pub async fn look_for_mine(
     .await?;
 
     match waypoint_response.waypoint_type.as_str() {
-        MINING_WAYPOINT_TYPE => Ok(State::Mining),
+        MINING_WAYPOINT_TYPE => Ok(None),
         _ => {
             let destination = find_waypoint_type_in_system(
                 client,
@@ -37,13 +37,11 @@ pub async fn look_for_mine(
             .await?;
 
             if let Some(dest) = destination {
-                trace!("Ship {ship_symbol} found waypoint of type {MINING_WAYPOINT_TYPE} in waypoint {dest}");
+                info!("Ship {ship_symbol} found {MINING_WAYPOINT_TYPE} in waypoint {dest}");
                 let _ = queries::orbit(client, sender, token, ship_symbol).await?;
                 let navigate_response =
                     queries::navigate(client, sender, token, ship_symbol, &dest).await?;
-                Ok(State::NavigatingToMine {
-                    arrival: navigate_response.nav.route.arrival,
-                })
+                Ok(Some(navigate_response.nav.route.arrival))
             } else {
                 warn!(
                     "Ship {ship_symbol} found no waypoint of type {MINING_WAYPOINT_TYPE} in system {}",

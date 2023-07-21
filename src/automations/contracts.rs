@@ -1,3 +1,4 @@
+use super::CONTRACTS_INTERVAL_SECS;
 use crate::queries::Query;
 use crate::{local_data::Credentials, queries};
 use log::{info, trace};
@@ -11,7 +12,8 @@ pub async fn contracts(
     credentials: Credentials,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     info!("Started contracts task");
-    let mut interval = time::interval(time::Duration::from_secs(10));
+
+    let mut interval = time::interval(time::Duration::from_secs(CONTRACTS_INTERVAL_SECS));
 
     loop {
         interval.tick().await;
@@ -21,8 +23,26 @@ pub async fn contracts(
         for contract in contracts.iter() {
             if !contract.accepted {
                 info!("Contract with id \"{}\" needs to be accepted", contract.id);
-                queries::accept_contract(&client, &sender, &credentials.token, &contract.id)
-                    .await?;
+                let _ =
+                    queries::accept_contract(&client, &sender, &credentials.token, &contract.id)
+                        .await?;
+            } else if !contract.fulfilled {
+                for delivery in contract.terms.deliver.iter() {
+                    if delivery.units_fulfilled < delivery.units_required {
+                        break;
+                    }
+                }
+                let unfulfilled_delivery = contract
+                    .terms
+                    .deliver
+                    .iter()
+                    .find(|&delivery| delivery.units_fulfilled < delivery.units_required)
+                    .is_some();
+                if !unfulfilled_delivery {
+                    info!("Contract with id \"{}\" needs to be fulfilled", contract.id);
+                    let _ = queries::fulfill(&client, &sender, &credentials.token, &contract.id)
+                        .await?;
+                }
             }
         }
     }

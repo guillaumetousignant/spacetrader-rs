@@ -1,6 +1,7 @@
-use crate::queries::{
-    get_rate_limit, Query, RequestNotClonedError, StatusError, TooManyRetriesError, N_RETRIES,
-};
+use super::{RATE_LIMIT_BUFFER_MILLI, RATE_LIMIT_MILLI};
+use crate::automations::utilities::wait_until;
+use crate::queries::{Query, RequestNotClonedError, StatusError, TooManyRetriesError, N_RETRIES};
+use crate::spacetraders_api::errors::RateLimitResponse;
 use log::{info, trace, warn};
 use reqwest::StatusCode;
 use tokio::sync::mpsc::Receiver;
@@ -10,7 +11,10 @@ pub async fn queries(
     mut receiver: Receiver<Query>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     info!("Started queries task");
-    let mut interval = time::interval(time::Duration::from_millis(500));
+
+    let mut interval = time::interval(time::Duration::from_millis(
+        RATE_LIMIT_MILLI + RATE_LIMIT_BUFFER_MILLI,
+    ));
 
     while let Some(query) = receiver.recv().await {
         trace!("Received query");
@@ -29,13 +33,16 @@ pub async fn queries(
             } else {
                 match response.status() {
                     StatusCode::TOO_MANY_REQUESTS => {
-                        warn!("Rate limited");
-                        let duration = get_rate_limit(&response)?;
+                        //let text = response.text().await?;
+                        let expiration =
+                            response.json::<RateLimitResponse>().await?.error.data.reset;
+
+                        warn!("Rate limited until {}", expiration);
                         if i + 1 >= N_RETRIES {
                             let _ = query.response.send(Err(TooManyRetriesError.into()));
                             break;
                         }
-                        tokio::time::sleep(duration).await;
+                        wait_until(expiration).await?;
                     }
                     _ => {
                         let _ = query.response.send(Err(StatusError {

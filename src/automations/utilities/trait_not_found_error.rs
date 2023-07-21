@@ -3,13 +3,13 @@ use std::error;
 use std::fmt;
 
 #[derive(Debug, Clone)]
-pub struct TraitNotFoundError {
+pub struct TraitNotFoundInSystemError {
     pub ship_symbol: String,
     pub trait_name: String,
     pub system: System,
 }
 
-impl fmt::Display for TraitNotFoundError {
+impl fmt::Display for TraitNotFoundInSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
@@ -19,4 +19,4 @@ impl fmt::Display for TraitNotFoundError {
     }
 }
 
-impl error::Error for TraitNotFoundError {}
+impl error::Error for TraitNotFoundInSystemError {}

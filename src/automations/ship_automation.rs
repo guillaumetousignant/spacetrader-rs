@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::error;
 use std::fmt;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum ShipAutomation {
     Command,
     Mining,
