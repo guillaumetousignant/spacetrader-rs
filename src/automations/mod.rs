@@ -16,4 +16,4 @@ pub use ship_automation::UnknownShipAutomationError;
 const ACQUISITIONS_INTERVAL_SECS: u64 = 10;
 const CONTRACTS_INTERVAL_SECS: u64 = 10;
 const RATE_LIMIT_MILLI: u64 = 500;
-const RATE_LIMIT_BUFFER_MILLI: u64 = 50;
+const RATE_LIMIT_BUFFER_MILLI: u64 = 0;

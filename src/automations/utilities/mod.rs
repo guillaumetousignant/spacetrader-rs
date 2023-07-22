@@ -26,4 +26,4 @@ pub use waypoint_type_not_found_error::WaypointTypeNotFoundError;
 pub const MINING_WAYPOINT_TYPE: &str = "ASTEROID_FIELD";
 pub const MARKET_TRAIT: &str = "MARKETPLACE";
 pub const FUEL_SYMBOL: &str = "FUEL";
-const WAIT_UNTIL_BUFFER_MILLIS: i64 = 100;
+const WAIT_UNTIL_BUFFER_MILLIS: i64 = 0;

@@ -15,6 +15,7 @@ pub async fn queries(
     let mut interval = time::interval(time::Duration::from_millis(
         RATE_LIMIT_MILLI + RATE_LIMIT_BUFFER_MILLI,
     ));
+    interval.set_missed_tick_behavior(time::MissedTickBehavior::Delay);
 
     while let Some(query) = receiver.recv().await {
         trace!("Received query");
@@ -33,11 +34,10 @@ pub async fn queries(
             } else {
                 match response.status() {
                     StatusCode::TOO_MANY_REQUESTS => {
-                        //let text = response.text().await?;
                         let expiration =
                             response.json::<RateLimitResponse>().await?.error.data.reset;
 
-                        warn!("Rate limited until {}", expiration);
+                        warn!("Rate limited until {}, retry {}", expiration, i);
                         if i + 1 >= N_RETRIES {
                             let _ = query.response.send(Err(TooManyRetriesError.into()));
                             break;
