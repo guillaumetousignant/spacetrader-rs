@@ -32,27 +32,33 @@ pub async fn queries(
                 let _ = query.response.send(Ok(response)); // We ignore errors here, because it just means that the other end doesn't care about the response
                 break;
             } else {
-                match response.status() {
-                    StatusCode::TOO_MANY_REQUESTS => {
-                        let expiration =
-                            response.json::<RateLimitResponse>().await?.error.data.reset;
+                if response.status() == StatusCode::TOO_MANY_REQUESTS {
+                    let expiration = response.json::<RateLimitResponse>().await?.error.data.reset;
 
-                        warn!("Rate limited until {}, retry {}", expiration, i);
-                        if i + 1 >= N_RETRIES {
-                            let _ = query.response.send(Err(TooManyRetriesError.into()));
-                            break;
-                        }
-                        wait_until(expiration).await?;
-                    }
-                    _ => {
-                        let _ = query.response.send(Err(StatusError {
-                            status: response.status(),
-                            url: response.url().clone(),
-                            message: response.text().await?,
-                        }
-                        .into()));
+                    warn!("Rate limited until {}, retry {}", expiration, i);
+                    if i + 1 >= N_RETRIES {
+                        let _ = query.response.send(Err(TooManyRetriesError.into()));
                         break;
                     }
+                    wait_until(expiration).await?;
+                } else if response.status().is_server_error() {
+                    warn!(
+                        "Server error \"{}\", retry {}",
+                        response.status().canonical_reason().unwrap_or(""),
+                        i
+                    );
+                    if i + 1 >= N_RETRIES {
+                        let _ = query.response.send(Err(TooManyRetriesError.into()));
+                        break;
+                    }
+                } else {
+                    let _ = query.response.send(Err(StatusError {
+                        status: response.status(),
+                        url: response.url().clone(),
+                        message: response.text().await?,
+                    }
+                    .into()));
+                    break;
                 }
             }
         }
