@@ -1,6 +1,8 @@
 .gitignore linguist-vendored
 Cargo.lock linguist-vendored
 Cargo.toml linguist-vendored
+LICENSE linguist-vendored
+README.md linguist-vendored
 
 * text=auto eol=crlf
 *.{cmd,[cC][mM][dD]} text eol=crlf
